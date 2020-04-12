@@ -6,6 +6,7 @@
         <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-button-response.js"></script>
         <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
     </head>
     <body></body>
@@ -25,32 +26,55 @@
     };
     timeline.push(welcome);
 
-    var instructions = {
-        type: "html-keyboard-response",
-        stimulus: "<p>In this experiment, a circle will appear in the center " +
-        "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
-        "press the letter F on the keyboard as fast as you can.</p>" +
-        "<p>If the circle is <strong>orange</strong>, press the letter J " +
-        "as fast as you can.</p>" +
-        "<div style='width: 700px;'>"+
-        "<div style='float: left;'><img src='img/blue.png'></img>" +
-        "<p class='small'><strong>Press the F key</strong></p></div>" +
-        "<div class='float: right;'><img src='img/orange.png'></img>" +
-        "<p class='small'><strong>Press the J key</strong></p></div>" +
-        "</div>"+
-        "<p>Press any key to begin.</p>",
-        post_trial_gap: 1500,
-    };
-    timeline.push(instructions);
+    // var instructions = {
+    //     type: "html-keyboard-response",
+    //     stimulus: "<p>In this experiment, a circle will appear in the center " +
+    //     "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
+    //     "press the letter F on the keyboard as fast as you can.</p>" +
+    //     "<p>If the circle is <strong>orange</strong>, press the letter J " +
+    //     "as fast as you can.</p>" +
+    //     "<div style='width: 700px;'>"+
+    //     "<div style='float: left;'><img src='img/blue.png'></img>" +
+    //     "<p class='small'><strong>Press the F key</strong></p></div>" +
+    //     "<div class='float: right;'><img src='img/orange.png'></img>" +
+    //     "<p class='small'><strong>Press the J key</strong></p></div>" +
+    //     "</div>"+
+    //     "<p>Press any key to begin.</p>",
+    //     post_trial_gap: 1500,
+    // };
+    // timeline.push(instructions);   
 
+    function myFunction() {
+          var x = document.getElementById("myText").value;
+          console.log(x);
+    }
     var testcopy = {
-      // type: "html-keyboard-response",
-      type: "audio-keyboard-response",
+      type: "audio-button-response",
+      // stimulus: '<iframe width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>',
       stimulus: "sounds/Disclosure - White Noise ft. AlunaGeorge.mp3",
       // prompt: "<p> hi </p>",
-      prompt: '<iframe width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>',
+      // choices: ['next'],
+      button_html: '<button onclick="myFunction()" class="jspsych-btn">%choice%</button>',
+      prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>'+
+      '<input type="Number of correct responses" id="myText" value="">',
+      // '<button onclick="myFunction()">Submit</button>',
+      choices: ['next'],
+
       // Make here that the function responds to a click from the embedding link
-      trial_duration: function(){
+      on_finish: function() { 
+        var x = document.getElementById("myText").value;
+        console.log(x);
+        // data.correct = x;
+        // console.log(data.correct)
+      },
+          // Here need to put data storage
+          
+
+      
+      //   console.log("moving?");
+      //   myFunction();
+      
+        
 
         // This function is just dumb now
         /*
@@ -97,6 +121,7 @@
                 subtree: true,};
         */
 
+        /*
         // Try to read from IFRAME
 
         var observer = new MutationObserver(function (mutations) {
@@ -127,16 +152,15 @@
                         observer.observe(iframe, config)
                     
                     });
-                
-
                 });
             });
         });
         console.log("the correct responses?",document.getElementById("timer"));
 
         observer.observe(document.documentElement, { childList: true, subtree: true });
+        */
 
-/*
+        /*
         // This function gets triggered when embedded object appears 
         // but it fails at telling me when the window appears
 
@@ -172,7 +196,7 @@
         addObserverIfDesiredNodeAvailable();
 */
         // return jsPsych.randomization.sampleWithoutReplacement([5000,6000], 1)[0];
-        },
+        // },
     };
     timeline.push(testcopy);
 
