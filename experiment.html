@@ -209,9 +209,33 @@
 
     var test = {
         type: "audio-button-response",
-        stimulus: jsPsych.timelineVariable('stimulus'),
+        stimulus: "sounds/Disclosure - White Noise ft. AlunaGeorge.mp3",
         choices: ['next'],
-        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>'+
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Dear valued customer, Thank you so very much for reaching out to us. We are a small company and love to hear that our products are making an impact! Quality control is a vital part of any business, and we pride ourselves that each order goes through a thirty-five-point inspection. Exceptional service is our object! All the best, Zackary" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
+        // data: jsPsych.timelineVariable('data'),
+        // on_finish: function(data){
+        //   data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        // }
+    }
+
+    var test2 = {
+        type: "audio-button-response",
+        stimulus: "sounds/Johnny Cash - Hurt.mp3",
+        choices: ['next'],
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Dear professor Lopez, I would like to apply to TA for your fall Calculus course. After receiving high marks and attending every available office hour, I feel that I am a qualified candidate for the position. I would be happy to supply my notes from this previous semester as proof of my excellence. I look forward to hearing from you! Benji" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
+        // data: jsPsych.timelineVariable('data'),
+        // on_finish: function(data){
+        //   data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        // }
+    }
+
+    var test3 = {
+        type: "audio-button-response",
+        stimulus: "sounds/Johnny Cash - Hurt.mp3",
+        choices: ['next'],
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Dear Joseph, Following your recent midterm, I am quite fearful of your success in my class. I would be happy to meet with you to discuss a possible fix in your study habits or find an opening in our schedules for weekly tutoring. You seem like a very bright student, so I would hate to see you fall behind. Best of luck this semester! Dr. Lazary" frameborder="0"></iframe>'+
         '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
         // data: jsPsych.timelineVariable('data'),
         // on_finish: function(data){
@@ -220,8 +244,8 @@
     }
 
     var test_procedure = {
-        timeline: [fixation, test],
-        timeline_variables: audio_stimuli,
+        timeline: [fixation, test, fixation, test2, fixation, test3],
+        // timeline_variables: audio_stimuli,
         repetitions: 1,
         randomize_order: true
     }
