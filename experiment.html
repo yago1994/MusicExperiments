@@ -24,49 +24,39 @@
         "After each task you will have 30 second breaks before the next task begins. Press any key to begin.",
         post_trial_gap: 100
     };
-    timeline.push(welcome);
+    timeline.push(welcome); 
 
-    // var instructions = {
-    //     type: "html-keyboard-response",
-    //     stimulus: "<p>In this experiment, a circle will appear in the center " +
-    //     "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
-    //     "press the letter F on the keyboard as fast as you can.</p>" +
-    //     "<p>If the circle is <strong>orange</strong>, press the letter J " +
-    //     "as fast as you can.</p>" +
-    //     "<div style='width: 700px;'>"+
-    //     "<div style='float: left;'><img src='img/blue.png'></img>" +
-    //     "<p class='small'><strong>Press the F key</strong></p></div>" +
-    //     "<div class='float: right;'><img src='img/orange.png'></img>" +
-    //     "<p class='small'><strong>Press the J key</strong></p></div>" +
-    //     "</div>"+
-    //     "<p>Press any key to begin.</p>",
-    //     post_trial_gap: 1500,
-    // };
-    // timeline.push(instructions);   
+    // function myFunction() {
+    //       var x = document.getElementById("myText").value;
+    //       console.log(x);
+    // }
 
-    function myFunction() {
-          var x = document.getElementById("myText").value;
-          console.log(x);
-    }
+  /*
+    var check_consent = function(elem) {
+      console.log(document.getElementById("myText").value);
+    };
+
     var testcopy = {
       type: "audio-button-response",
       // stimulus: '<iframe width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>',
       stimulus: "sounds/Disclosure - White Noise ft. AlunaGeorge.mp3",
       // prompt: "<p> hi </p>",
       // choices: ['next'],
-      button_html: '<button onclick="myFunction()" class="jspsych-btn">%choice%</button>',
+      // button_html: '<button onclick="myFunction()" class="jspsych-btn">%choice%</button>',
       prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>'+
-      '<input type="Number of correct responses" id="myText" value="">',
+      '<input type="text" id="myText" value="5">',
       // '<button onclick="myFunction()">Submit</button>',
       choices: ['next'],
-
+      check_fn: check_consent,
+  
       // Make here that the function responds to a click from the embedding link
-      on_finish: function() { 
-        var x = document.getElementById("myText").value;
-        console.log(x);
-        // data.correct = x;
-        // console.log(data.correct)
-      },
+      // on_finish: function() { 
+      //   var x = document.getElementById("myText").value;
+      //   console.log(x);
+      //   console.log("hellloo!");
+      //   // data.correct = x;
+      //   // console.log(data.correct)
+      // },
           // Here need to put data storage
           
 
@@ -197,10 +187,51 @@
 */
         // return jsPsych.randomization.sampleWithoutReplacement([5000,6000], 1)[0];
         // },
-    };
-    timeline.push(testcopy);
-
+    // };
+    // timeline.push(testcopy);
+    
     /* test trials */
+    var audio_stimuli = [
+        { stimulus: "sounds/Disclosure - White Noise ft. AlunaGeorge.mp3"},
+        { stimulus: "Johnny Cash - Hurt.mp3"},
+        { stimulus: "Johnny Cash - Hurt.mp3"}
+    ];
+
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function(){
+          return jsPsych.randomization.sampleWithoutReplacement([250,500,750,1000,1250,1500,1750,2000], 1)[0];
+        },
+        data: {test_part: 'fixation'}
+    }
+
+    var test = {
+        type: "audio-button-response",
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        choices: ['next'],
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
+        // data: jsPsych.timelineVariable('data'),
+        // on_finish: function(data){
+        //   data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        // }
+    }
+
+    var test_procedure = {
+        timeline: [fixation, test],
+        timeline_variables: audio_stimuli,
+        repetitions: 1,
+        randomize_order: true
+    }
+
+    timeline.push(test_procedure);
+
+
+    /* Old code from tutorial run
+
+    // test trials
     var test_stimuli = [
         { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
         { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
@@ -229,12 +260,13 @@
     var test_procedure = {
         timeline: [fixation, test],
         timeline_variables: test_stimuli,
-        repetitions: 5,
+        repetitions: 2,
         randomize_order: true
     }
 
     timeline.push(test_procedure);
 
+    */
     var debrief_block = {
       type: "html-keyboard-response",
       stimulus: function() {
