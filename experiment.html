@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My experiment</title>
+        <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+    <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+        type: "html-keyboard-response",
+        stimulus: "Hello and thank you for participating in this experiment for MUS 6001." +
+        "The results of this experiment will towards improving our understanding of music."+
+        "The following experiment will be divided into three tasks. The task consists of copying a text that you will be given."+
+        "After each task you will have 30 second breaks before the next task begins. Press any key to begin.",
+        post_trial_gap: 100
+    };
+    timeline.push(welcome);
+
+    var instructions = {
+        type: "html-keyboard-response",
+        stimulus: "<p>In this experiment, a circle will appear in the center " +
+        "of the screen.</p><p>If the circle is <strong>blue</strong>, " +
+        "press the letter F on the keyboard as fast as you can.</p>" +
+        "<p>If the circle is <strong>orange</strong>, press the letter J " +
+        "as fast as you can.</p>" +
+        "<div style='width: 700px;'>"+
+        "<div style='float: left;'><img src='img/blue.png'></img>" +
+        "<p class='small'><strong>Press the F key</strong></p></div>" +
+        "<div class='float: right;'><img src='img/orange.png'></img>" +
+        "<p class='small'><strong>Press the J key</strong></p></div>" +
+        "</div>"+
+        "<p>Press any key to begin.</p>",
+        post_trial_gap: 1500,
+    };
+    timeline.push(instructions);
+
+    var testcopy = {
+      // type: "html-keyboard-response",
+      type: "audio-keyboard-response",
+      stimulus: "sounds/Disclosure - White Noise ft. AlunaGeorge.mp3",
+      // prompt: "<p> hi </p>",
+      prompt: '<iframe width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=5&rand=1&words=Hi this is a test for the music experiment that we are doing in class" frameborder="0"></iframe>',
+      // Make here that the function responds to a click from the embedding link
+      trial_duration: function(){
+
+        // This function is just dumb now
+        /*
+        function addObserverIfDesiredNodeAvailable() {
+          var trigerBox = document.getElementById("embeddedObject");
+          if(!trigerBox) {
+              //The node we need does not exist yet.
+              //Wait 500ms and try again
+              window.setTimeout(addObserverIfDesiredNodeAvailable,1000);
+              console.log("que cojones");
+              return;
+          }
+              
+          // Get the iframe body
+          let iframe = document.getElementById('iframe').contentWindow.document.body
+          // Setup the config
+          let config = { attributes: true, childList: true, subtree: true, }
+          // Create a callback
+          let callback = function(mutationsList) { 
+            mutations.forEach(function(mutation) {
+              console.log(mutation);
+            }); 
+          }
+
+          // Watch the iframe for changes
+          let observer = new MutationObserver(callback)
+          observer.observe(iframe, config)
+        }
+          addObserverIfDesiredNodeAvailable();
+        */
+
+        // Won't work because it is referenced before it appears
+        /*
+        var mutationObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              console.log(mutation);
+              });
+          });
+          console.log("que pasa!");
+
+          var composeBox = document.documentElement;
+          var config = {attributes: true,
+                childList: true,
+                subtree: true,};
+        */
+
+        // Try to read from IFRAME
+
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                console.log("entered here");
+                [].filter.call(mutation.addedNodes, function (node) {
+                    console.log(node);
+                    console.log(node.nodeName);
+                    return node.nodeName == 'IFRAME';
+                }).forEach(function (node) {
+                    console.log("am I here?");
+                    node.addEventListener('load', function (e) {
+                        console.log('loaded', node.src);
+                        console.log("do you see me?",document.getElementById("timer"));
+                        // Get the iframe body
+                        let iframe = node.contentWindow.document.body
+                        // Setup the config
+                        let config = { attributes: true, childList: true, subtree: true, }
+                        // Create a callback
+                        let callback = function(mutationsList) { 
+                          mutations.forEach(function(mutation) {
+                            console.log(mutation);
+                          }); 
+                        }
+
+                        // Watch the iframe for changes
+                        let observer = new MutationObserver(callback)
+                        observer.observe(iframe, config)
+                    
+                    });
+                
+
+                });
+            });
+        });
+        console.log("the correct responses?",document.getElementById("timer"));
+
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+
+/*
+        // This function gets triggered when embedded object appears 
+        // but it fails at telling me when the window appears
+
+        var mutationObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            console.log(mutation);
+            // console.log(document.getElementById("row1"));
+          });
+        });
+        console.log("que pasa!");
+        function addObserverIfDesiredNodeAvailable() {
+          // var composeBox = document.querySelectorAll(".no")[2];
+          var trigerBox = document.getElementById("embeddedObject");
+          var composeBox = document.documentElement;
+          if(!trigerBox) {
+            //The node we need does not exist yet.
+            //Wait 500ms and try again
+            window.setTimeout(addObserverIfDesiredNodeAvailable,10000);
+            console.log("que cojones");
+            return;
+          }
+          console.log(trigerBox);
+          console.log("starting to record");
+          var config = {attributes: true,
+            childList: true,
+            subtree: true,};
+          mutationObserver.observe(composeBox,config);
+
+
+        console.log(document.getElementById("correct"));
+        
+        }
+        addObserverIfDesiredNodeAvailable();
+*/
+        // return jsPsych.randomization.sampleWithoutReplacement([5000,6000], 1)[0];
+        },
+    };
+    timeline.push(testcopy);
+
+    /* test trials */
+    var test_stimuli = [
+        { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
+        { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
+    ];
+
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function(){
+          return jsPsych.randomization.sampleWithoutReplacement([250,500,750,1000,1250,1500,1750,2000], 1)[0];
+        },
+        data: {test_part: 'fixation'}
+    }
+
+    var test = {
+        type: "image-keyboard-response",
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        choices: ['f', 'j'],
+        data: jsPsych.timelineVariable('data'),
+        on_finish: function(data){
+          data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        }
+    }
+
+    var test_procedure = {
+        timeline: [fixation, test],
+        timeline_variables: test_stimuli,
+        repetitions: 5,
+        randomize_order: true
+    }
+
+    timeline.push(test_procedure);
+
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function() {
+
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
+        var correct_trials = trials.filter({correct: true});
+        var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
+        var rt = Math.round(correct_trials.select('rt').mean());
+
+        return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
+        "<p>Your average response time was "+rt+"ms.</p>"+
+        "<p>Press any key to complete the experiment. Thank you!</p>";
+
+      }
+    };
+
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function(data) {
+        jsPsych.data.displayData();
+      }
+    });
+    </script>
+</html>

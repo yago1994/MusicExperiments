@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My tests</title>
+        <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+    <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    /* define welcome message trial */
+    var welcome = {
+        type: "html-keyboard-response",
+        stimulus: "Welcome to the experiment. Press any key to begin.",
+        post_trial_gap: 100
+    };
+    timeline.push(welcome);
+
+    // Changes to play around with Data Trials
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: '<<<<<',
+      choices: ['f','j'],
+      data: {
+        stimulus_type: 'congruent',
+        target_direction: 'left'
+      },
+      on_start: function(trial){
+        trial.stimulus = '<<><<';
+        trial.data.stimulus_type = 'incongruent';
+      },
+      on_load: function() {
+          console.log('The trial just finished loading.');
+      }
+    }
+    timeline.push(trial);
+
+    var trial = {
+      type: 'html-keyboard-response',
+      stimulus: '<<<<<',
+      choices: ['f','j'],
+      data: {
+        stimulus_type: 'congruent',
+        target_direction: 'left',
+        image_type: 'A'
+      },
+      on_finish: function(data){
+        if(data.key_press == 70){// 70 is the numeric code for f
+          data.correct = true; // can add property correct by modify data object directly
+        } else {
+          data.correct = false;
+        }
+      },
+      post_trial_gap: 300
+    }
+
+    var feedback = {
+      type: 'html-keyboard-response',
+      stimulus: function(){
+        var last_trial_correct = jsPsych.data.get().last(1).values()[0].correct;
+        if(last_trial_correct){
+          return "<p>Correct!</p>"+"&nbsp"+"<p> Press any key to continue </p>";
+        } else {
+          return "<p>Wrong.</p>"+"&nbsp"+"<p> Press any key to continue </p>"
+        }
+      },
+      post_trial_gap: 300
+    }
+
+    timeline.push(trial, feedback);
+
+    // generate a random subject ID with 15 characters
+    var subject_id = jsPsych.randomization.randomID(15);
+
+    // pick a random condition for the subject at the start of the experiment
+    var condition_assignment = jsPsych.randomization.sampleWithoutReplacement(['conditionA', 'conditionB', 'conditionC'], 1)[0];
+
+    // record the condition assignment in the jsPsych data
+    // this adds a property called 'subject' and a property called 'condition' to every trial
+    jsPsych.data.addProperties({
+        subject: subject_id,
+        condition: condition_assignment
+    });
+
+    var some_data_displays = {
+        type: 'html-keyboard-response',
+        stimulus: function(){
+            var data2 = jsPsych.data.get().filter({trial_type: 'html-keyboard-response'});
+    
+
+            return data2;
+        }
+    }
+    timeline.push(some_data_displays);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      on_finish: function(data) {
+        jsPsych.data.displayData();
+      }
+    });
+    </script>
+</html>
