@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My experiment</title>
+        <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-audio-button-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+    <script>
+
+    /* create timeline */
+    var timeline = [];
+
+    var welcome = {
+       type: 'html-keyboard-response',
+       stimulus: "<p>Hello! Thank your participating in this experiment.</p><br>" +
+           "<p><b>Please check the volume on your headphones/speakers is set to a comfortable and safe level</b>.</p><br>"  +
+           "<p>When you are ready to begin, press any key.</p>"
+    }; 
+    timeline.push(welcome);
+
+    /* define welcome message trial */
+    var instructions = {
+        type: "html-keyboard-response",
+        stimulus: "<p>The results of this experiment will towards improving our understanding of music. "+
+        "The following experiment will be divided into three tasks. In each task, you will be given a text "+
+        "that you have to type up, sort of like a typing test if you are familiar with them.</p>"+ 
+        "<p>Please start the test as soon as the typing text appears. "+
+        "Whenever you are done with the test you will reach a <b>[end of test] [end of test] [end of test]</b>, at this point, you may click the next button at the top of the screen to continue.</p>"+
+        "<p>After each task you will have 30 second breaks before the next task begins. Press any key to begin.</p>",
+        post_trial_gap: 100
+    };
+    timeline.push(instructions); 
+    
+    /* test trials */
+    var audio_stimuli = [
+        { stimulus: "sounds/APAAK-INST.ogg", data: {test_part: 'test'}, prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Dear valued customer, Thank you so very much for reaching out to us. We are a small company and love to hear that our products are making an impact! Quality control is a vital part of any business, and we pride ourselves that each order goes through a thirty-five-point inspection. Exceptional service is our object! All the best, Zackary [end of test] [end of test] [end of test]" frameborder="0"></iframe>'},
+        { stimulus: "sounds/APAAK.ogg", data: {test_part: 'test'}, prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Hello valued customer, Thank you so very much for reaching out to us. We are a small company and love to hear that our products are making an impact! Quality control is a vital part of any business, and we pride ourselves that each order goes through a thirty-five-point inspection. Exceptional service is our object! All the best, Zackary [end of test] [end of test] [end of test]" frameborder="0"></iframe>'},
+        { stimulus: "sounds/APAAK.ogg", data: {test_part: 'test'}, prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Bye valued customer, Thank you so very much for reaching out to us. We are a small company and love to hear that our products are making an impact! Quality control is a vital part of any business, and we pride ourselves that each order goes through a thirty-five-point inspection. Exceptional service is our object! All the best, Zackary [end of test] [end of test] [end of test]" frameborder="0"></iframe>'}
+    ];
+
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>'+
+        "<p>&nbsp</p>"+
+        "<p> The next trial will start in 30 seconds, or you can press any key to continue",
+        trial_duration: function(){
+          // TO ADJUST TO 30 SECONDS LENGTH
+          return jsPsych.randomization.sampleWithoutReplacement([30000], 1)[0];
+        },
+        data: {test_part: 'fixation'}
+    }
+
+    var test_instrumental = {
+        type: "audio-button-response",
+        stimulus: "sounds/APAAK-INST.ogg",
+        choices: ['next'],
+        test_part: 'test',
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Dear valued customer, Thank you so very much for reaching out to us. We are a small company and love to hear that our products are making an impact! Quality control is a vital part of any business, and we pride ourselves that each order goes through a thirty-five-point inspection. Exceptional service is our object! All the best, Zackary [end of test] [end of test] [end of test]" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
+        // data: jsPsych.timelineVariable('data'),
+        // on_finish: function(data){
+        //   data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        // }
+        trial_duration: function(){
+          // TO ADJUST TO 30 SECONDS LENGTH
+          return jsPsych.randomization.sampleWithoutReplacement([180000], 1)[0];
+        },
+    }
+
+    var test_vocal = {
+        type: "audio-button-response",
+        stimulus: "sounds/APAAK.ogg",
+        choices: ['next'],
+        test_part: 'test',
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Dear professor Lopez, I would like to apply to TA for your fall Calculus course. After receiving high marks and attending every available office hour, I feel that I am a qualified candidate for the position. I would be happy to supply my notes from this previous semester as proof of my excellence. I look forward to hearing from you! Benji [end of test] [end of test] [end of test]" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value="">',
+        trial_duration: function(){
+          // TO ADJUST TO 30 SECONDS LENGTH
+          return jsPsych.randomization.sampleWithoutReplacement([180000], 1)[0];
+        },
+    }
+
+    var test = {
+        type: "audio-button-response",
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        // stimulus: "sounds/APAAK.ogg",
+        choices: ['next'],
+        prompt: jsPsych.timelineVariable('prompt'),
+        trial_duration: function(){
+          return jsPsych.randomization.sampleWithoutReplacement([180000], 1)[0];
+        },
+    }
+
+    var test_nosound = {
+        type: "audio-button-response",
+        stimulus: "sounds/APAAK.ogg",
+        choices: ['next'],
+        test_part: 'test',
+        prompt: '<iframe id="myiframe" width="640" height="600" src="https://10fastfingers.com/widgets/ttembeddable/?dur=180&rand=1&words=Dear Joseph, Following your recent midterm, I am quite fearful of your success in my class. I would be happy to meet with you to discuss a possible fix in your study habits or find an opening in our schedules for weekly tutoring. You seem like a very bright student, so I would hate to see you fall behind. Best of luck this semester! Dr. Lazary [end of test] [end of test] [end of test]" frameborder="0"></iframe>'+
+        '<p></p><label for="myText">Fill in here your number of correct answers</label><input type="text" id="myText" value=""',   
+        trial_duration: function(){
+          // TO ADJUST TO 30 SECONDS LENGTH
+          return jsPsych.randomization.sampleWithoutReplacement([180000], 1)[0];
+        },
+    }
+
+    var audio = ['sounds/APAAK-INST.ogg','sounds/APAAK.ogg'];
+
+    // var test_procedure = {
+    //     timeline: [test_nosound, fixation, test_vocal, fixation, test_instrumental],
+    //     // timeline_variables: jsPsych.timelineVariable('stimulus'),
+    //     // data: jsPsych.timelineVariable('data'),
+    //     repetitions: 1,
+    //     randomize_order: true
+    // }
+
+    var test_procedure = {
+        timeline: [test, fixation],
+        timeline_variables: audio_stimuli,
+        data: jsPsych.timelineVariable('data'),
+        repetitions: 1,
+        randomize_order: true
+    }
+
+    timeline.push(test_procedure);
+
+    // Here I will put the survey questions
+
+    var questionnaire = {
+      // Either multiple choice where the button defines the correct answer, or a radio html-button-response"
+    }
+
+
+    /* Old code from tutorial run
+
+    // test trials
+    var test_stimuli = [
+        { stimulus: "img/blue.png", data: {test_part: 'test', correct_response: 'f'}},
+        { stimulus: "img/orange.png", data: {test_part: 'test', correct_response: 'j'}}
+    ];
+
+    var fixation = {
+        type: 'html-keyboard-response',
+        stimulus: '<div style="font-size:60px;">+</div>',
+        choices: jsPsych.NO_KEYS,
+        trial_duration: function(){
+          return jsPsych.randomization.sampleWithoutReplacement([250,500,750,1000,1250,1500,1750,2000], 1)[0];
+        },
+        data: {test_part: 'fixation'}
+    }
+
+    var test = {
+        type: "image-keyboard-response",
+        stimulus: jsPsych.timelineVariable('stimulus'),
+        choices: ['f', 'j'],
+        data: jsPsych.timelineVariable('data'),
+        on_finish: function(data){
+          data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+        }
+    }
+
+    var test_procedure = {
+        timeline: [fixation, test],
+        timeline_variables: test_stimuli,
+        repetitions: 2,
+        randomize_order: true
+    }
+
+    timeline.push(test_procedure);
+
+    */
+    var debrief_block = {
+      type: "html-keyboard-response",
+      stimulus: function(data) {
+
+        var trials = jsPsych.data.get().filter({test_part: 'test'});
+        var correct_trials = trials.filter({correct: true});
+        var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
+        var rt = Math.round(trials.select('rt').mean());
+
+        return "<p>Your average response time was "+rt+"ms.</p>"+
+        "<p>Press any key to complete the experiment. Thank you!</p>";
+
+      }
+    };
+
+    timeline.push(debrief_block);
+
+    /* start the experiment */
+    jsPsych.init({
+      timeline: timeline,
+      preload_audio: audio,
+      on_finish: function(data) {
+        jsPsych.data.displayData();
+      }
+    });
+    </script>
+</html>
