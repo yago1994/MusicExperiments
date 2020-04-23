@@ -1,2 +1,2 @@
 # MusicExperiments
-Music Experiment on typing a given text with no music, instrumental, and vocals. A study on attention, accuracy, and comprehension.
+Music Experiment on typing a given text with no music, instrumental, and vocals. A study on attention, response time, and comprehension.
